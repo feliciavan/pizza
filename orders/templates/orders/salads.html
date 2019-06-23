@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pinocchio's Pizza & Subs</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script tpye="text/javascript">
+
+        document.addEventListener('DOMContentLoaded', () => {
+              document.querySelector('#num_order').innerHTML = {{ num_order}};
+        });
+
+        </script>
+    </head>
+    <body>
+    <br>
+
+    <center>
+        <h1 class="display-4 font-weight-bold">Pinocchio's Pizza & Subs</h1>
+    </center>
+    <br>
+
+    <div class="container">
+
+
+        <h4 style="float:left"> Welcome, {{ user.username }}! </h4>
+        <a href="{% url 'logout' %}" class="btn btn-light" style="float:left;margin-left:20px">logout</a>
+        <a href="{% url 'cart' %}" class="btn btn-outline-primary" style="float:right">shopping cart <span class="badge badge-primary" id="num_order"></span></a>
+        <br>
+        <br>
+
+        <ul  class="nav justify-content-center nav-pills">
+            <li class="nav-item"><a class="nav-link " href="{% url 'pizza' %}">pizza</a></li>
+            <li class="nav-item"><a class="nav-link " href="{% url 'subs' %}">subs</a></li>
+            <li class="nav-item"><a class="nav-link " href="{% url 'pasta' %}">pasta</a></li>
+            <li class="nav-item"><a class="nav-link active" href="{% url 'salads' %}">salads</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'dinner' %}">dinner platters</a></li>
+        </ul>
+        <br>
+
+        {% if message %}
+            <div class="alert alert-danger" role="alert">
+            {{ message }}
+            </div>
+        {% endif %}
+        <h3>type</h3>
+       <form action="{% url 'salads' %}" method="post" id="myForm">
+        {% csrf_token %}
+          <div class="row">
+          {% for s in salads %}
+              <div class="col-sm-3">
+                  <div class="card">
+                      <div class="card-body">
+                          <h5 class="card-title">{{s.kind}}</h5>
+                          <p class="card-text">$ {{s.price}}</p>
+                          <div class="form-check">
+                              <input class="form-check-input" type="checkbox" value="{{s.kind}}" name="salad[]">
+                              <label class="form-check-label" for="defaultCheck1">want it</label>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          {% endfor %}
+          </div>
+          <br>
+          <br>
+          <button style="float:right;" id="cart" class="btn btn-success">add to the shopping cart</button>
+      </form>
+      </div>
+    </body>
+</html>

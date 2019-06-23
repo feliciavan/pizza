@@ -1,0 +1,56 @@
+{% extends "orders/base.html" %}
+
+{% block body %}
+<br>
+<center>
+<h1 class="display-4 font-weight-bold">Pinocchio's Pizza & Subs</h1>
+</center>
+{% if message %}
+    <div class="alert alert-danger" role="alert">
+    {{ message }}
+    </div>
+{% endif %}
+<br>
+<br>
+<center>
+<div class="card text-center" style="width: 18rem;">
+  <div class="card-body">
+
+    <form action="{% url 'signup' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>user name</label>
+          <input name="name" type="text" class="form-control" id="formGroupExampleInput" placeholder="enter a user name" autocomplete = "new-password">
+        </div>
+
+        <div class="form-group">
+          <label>password</label>
+          <input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="password" autocomplete = "new-password">
+        </div>
+
+        <div class="form-group">
+          <label>first name</label>
+          <input name="firstname" type="text" class="form-control" id="formGroupExampleInput" placeholder="first name" autocomplete = "new-password">
+        </div>
+
+        <div class="form-group">
+          <label>last name</label>
+          <input name="lastname" type="text" class="form-control" id="formGroupExampleInput" placeholder="last name" autocomplete = "new-password">
+        </div>
+
+        <div class="form-group">
+          <label>Email address</label>
+          <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="email" autocomplete = "new-password">
+          <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
+
+        <button type="submit" class="btn btn-success">signup</button>
+
+    </form>
+
+  </div>
+</div>
+</center>
+
+
+{% endblock %}

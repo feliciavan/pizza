@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pinocchio's Pizza & Subs</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+        <style>
+            @keyframes hide {
+                0% {
+                    opacity: 1;
+                    height: 100%;
+                    line-height: 100%;
+                    padding: 20px;
+                    margin-bottom: 10px;
+                }
+                75% {
+                    opacity: 0;
+                    height: 100%;
+                    line-height: 100%;
+                    padding: 20px;
+                    margin-bottom: 10px;
+                }
+                100% {
+                    opacity: 0;
+                    height: 0px;
+                    line-height: 0px;
+                    padding: 0px;
+                    margin-bottom: 0px;
+                }
+            }
+
+            .hide  {
+                float: right;
+            }
+
+            .list-group-item {
+                background-color: #EEE3ED;
+                padding: 20px;
+                margin-bottom: 10px;
+                animation-name: hide;
+                animation-duration: 2s;
+                animation-fill-mode: forwards;
+                animation-play-state: paused;
+            }
+        </style>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+            document.addEventListener('click', event => {
+                const element = event.target;
+                if (element.className === 'hide') {
+                    element.parentElement.style.animationPlayState = 'running';
+                    element.parentElement.addEventListener('animationend', () =>  {
+                        element.parentElement.remove();
+                    });
+                    var a = element.parentElement;
+                    var b = a.firstChild;
+                    var c = b.nextSibling;
+                    var d = c.nextSibling;
+                    var user = c.innerText;
+                    var product = d.nextSibling.innerText;
+
+                    const data = new FormData();
+                    data.append('user', user);
+                    data.append('product', product);
+
+                    const request = new XMLHttpRequest();
+                    request.open('POST', '/complete');
+
+                    function getCookie(name) {
+                        var cookieValue = null;
+                        if (document.cookie && document.cookie !== '') {
+                            var cookies = document.cookie.split(';');
+                            for (var i = 0; i < cookies.length; i++) {
+                                var cookie = cookies[i].trim();
+                                // Does this cookie string begin with the name we want?
+                                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                    break;
+                                }
+                              }
+                        }
+                        return cookieValue;
+                    }
+                    request.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                    request.send(data);
+                    return false;
+                }
+            });
+            });
+        </script>
+
+
+    </head>
+
+    <body>
+    <br>
+
+    <center>
+        <h1 class="display-4 font-weight-bold">Pinocchio's Pizza & Subs</h1>
+    </center>
+    <br>
+
+    <div class="container">
+        <h4 style="float:left"> Welcome, boss! </h4>
+        <a href="{% url 'logout' %}" class="btn btn-light" style="float:left;margin-left:20px">logout</a>
+        <br>
+        <br>
+
+        <h3>orders</h3>
+
+        <ul  class="list-group">
+        {% for o in order %}
+            <li class="list-group-item">
+              <span style="float:left">{{o.user}} </span>
+              <span style="float:left; margin-left:40px">{{o.product}} </span>
+              {% if o.toppings != "0" and o.toppings != "" %}
+                  <span style="float:left; ">: {{ o.toppings }}</span>
+              {% endif %}
+              <span name="price" style="float:left; margin-left:80px">${{o.price}}</span>
+              <button class="hide">complete</button>
+            </li>
+        {% endfor %}
+        </ul>
+
+      </div>
+    </body>
+</html>

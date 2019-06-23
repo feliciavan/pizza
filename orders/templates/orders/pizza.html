@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pinocchio's Pizza & Subs</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script tpye="text/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+
+            document.querySelector('#cart').onclick= () => {
+              const request = new XMLHttpRequest();
+              request.open('POST', '/order');
+              // Callback function for when request completes
+              request.onload = () => {
+                  const data = JSON.parse(request.responseText);
+                  document.querySelector('#num_order').innerHTML = data.num_order;
+              }
+              var num_order = document.querySelector('#num_order').innerHTML;
+              num_order++;
+              const data = new FormData();
+              data.append('num_order', num_order);
+              function getCookie(name) {
+                  var cookieValue = null;
+                  if (document.cookie && document.cookie !== '') {
+                      var cookies = document.cookie.split(';');
+                      for (var i = 0; i < cookies.length; i++) {
+                          var cookie = cookies[i].trim();
+                          // Does this cookie string begin with the name we want?
+                          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                              break;
+                          }
+                        }
+                  }
+                  return cookieValue;
+              }
+              request.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+              request.send(data);
+              return false;
+            }
+        });
+
+        </script>
+    </head>
+    <body>
+    <br>
+
+    <center>
+        <h1 class="display-4 font-weight-bold">Pinocchio's Pizza & Subs</h1>
+    </center>
+    <br>
+
+    <div class="container">
+        <h4 style="float:left"> Welcome, {{ user.username }}! </h4>
+        <a href="{% url 'logout' %}" class="btn btn-light" style="float:left;margin-left:20px">logout</a>
+        <a href="{% url 'cart' %}" class="btn btn-outline-primary" style="float:right">shopping cart <span class="badge badge-primary" id="num_order">{{ num_order}}</span></a>
+        <br>
+        <br>
+
+        <ul  class="nav justify-content-center nav-pills">
+            <li class="nav-item"><a class="nav-link active" href="{% url 'pizza' %}">pizza</a></li>
+            <li class="nav-item"><a class="nav-link " href="{% url 'subs' %}">subs</a></li>
+            <li class="nav-item"><a class="nav-link " href="{% url 'pasta' %}">pasta</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'salads' %}">salads</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'dinner' %}">dinner platters</a></li>
+        </ul>
+        <br>
+
+        {% if message %}
+            <div class="alert alert-danger" role="alert">
+            {{ message }}
+            </div>
+        {% endif %}
+        <h3>type</h3>
+       <form action="{% url 'pizza' %}" method="post">
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">regular pizza</h5>
+                <p class="card-text">Our Regular pizza is a thin-crust or Neapolitan pizza. They come in 2 sizes: small (12" in diameter) and large (16" in diameter). The small is suitable for 1 to 2 people while the large feeds 2 to 4 people.</p>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="regular" name="type[]">
+                  <label class="form-check-label" for="defaultCheck1">want it</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">sicilian pizza</h5>
+                <p class="card-text">Our Sicilian pizza is a deep-dish or thick-crust pizza. We sell them in a 9-slice or a 15-slice size.</p>
+                <br>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="sicilian" name="type[]">
+                  <label class="form-check-label" for="defaultCheck1">want it</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <br>
+        <h3>size</h3>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">small</h5>
+                            <p class="card-text">
+                            <ul>
+                                <li>12" in diameter</li>
+                                <li>for 1 to 2 people</li>
+                            </ul>
+                            </p>
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="small" name="size[]">
+                            <label class="form-check-label" for="defaultCheck1">want it</label>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-sm-6">
+                  <div class="card">
+                      <div class="card-body">
+                          <h5 class="card-title">large</h5>
+                          <p class="card-text">
+                              <ul>
+                                  <li>16" in diameter</li>
+                                  <li>for 2 to 4 people</li>
+                              </ul>
+                          </p>
+                          <div class="form-check">
+                              <input class="form-check-input" type="checkbox" value="large" name="size[]">
+                              <label class="form-check-label" for="defaultCheck1">want it</label>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <br>
+          <br>
+          <h3>flavor</h3>
+          <div class="row">
+              <div class="col-sm-4">
+                  <div class="card">
+                      <div class="card-body">
+                          <h5 class="card-title">cheese</h5>
+                          <p class="card-text">just cheese, no topping</p>
+                          <div class="form-check">
+                              <input class="form-check-input" type="checkbox" value="cheese" name="flavor[]">
+                              <label class="form-check-label" for="defaultCheck1">want it</label>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-sm-4">
+                  <div class="card">
+                      <div class="card-body">
+                          <h5 class="card-title">toppings</h5>
+                          <p class="card-text">you can select up to 3 toppings</p>
+                          <div class="form-check">
+                              <input class="form-check-input" type="checkbox" value="toppings" name="flavor[]">
+                              <label class="form-check-label" for="defaultCheck1">want it</label>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="col-sm-4">
+                  <div class="card">
+                      <div class="card-body">
+                          <h5 class="card-title">special</h5>
+                          <p class="card-text">Canadian flavor</p>
+                          <div class="form-check">
+                              <input class="form-check-input" type="checkbox" value="special" name="flavor[]">
+                              <label class="form-check-label" for="defaultCheck1">want it</label>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <br>
+          <br>
+
+          <div class="card"">
+              <div class="card-body">
+                  <h5 class="card-title">toppings</h5>
+                  <h6 class="card-subtitle mb-2 text-muted">
+                  When you have chosen <span class="font-weight-bold">toppings</span> in <span class="font-weight-bold">flavor</span> section, you can choose up to 3 toppings from below.
+                  </h6>
+                  <p class="card-text">
+                  <div class="row">
+                  {% for topping in toppings %}
+                  {% if forloop.counter0|divisibleby:4 %}
+                  </div>
+                  <div class="row">
+                      <div class="col-sm-3">
+                          <div class="form-check">
+                              <input class="form-check-input" type="checkbox" value="{{topping.kind}}"  name="top[]">
+                              <label class="form-check-label" for="defaultCheck1">{{topping.kind}}</label>
+                          </div>
+                      </div>
+                  {% else %}
+                      <div class="col-sm-3">
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="{{topping.kind}}"  name="top[]">
+                            <label class="form-check-label" for="defaultCheck1">{{topping.kind}}</label>
+                          </div>
+                      </div>
+                  {% endif %}
+                  {% endfor %}
+                  </div>
+                  </p>
+              </div>
+          </div>
+          <br>
+          <button style="float:left" type="submit" class="btn btn-info">check the price</button>
+      </form>
+      <button style="float:right;" id="cart" class="btn btn-success">add to the shopping cart</button>
+      {% if price %}
+           <span style="font-size: 20px; float:right; margin-right:20px" id="check_price">{{ price }}</span>  <h3 style="float:right; margin-right:20px">price:</h3>
+      {% endif %}
+      </div>
+    </body>
+</html>

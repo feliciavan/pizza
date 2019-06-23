@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pinocchio's Pizza & Subs</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+
+    <body>
+    <br>
+
+    <center>
+        <h1 class="display-4 font-weight-bold">Pinocchio's Pizza & Subs</h1>
+    </center>
+    <br>
+
+    <div class="container">
+        <h4 style="float:left"> Welcome, {{ user.username }}! </h4>
+        <a href="{% url 'logout' %}" class="btn btn-light" style="float:left;margin-left:20px">logout</a>
+        <br>
+        <br>
+        <ul  class="nav justify-content-center nav-pills">
+            <li class="nav-item"><a class="nav-link" href="{% url 'pizza' %}">pizza</a></li>
+            <li class="nav-item"><a class="nav-link " href="{% url 'subs' %}">subs</a></li>
+            <li class="nav-item"><a class="nav-link " href="{% url 'pasta' %}">pasta</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'salads' %}">salads</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'dinner' %}">dinner platters</a></li>
+        </ul>
+        {% if message %}
+            <div class="alert alert-danger" role="alert">
+            {{ message }}
+            </div>
+        {% endif %}
+
+        <h3>orders</h3>
+
+        <ul  class="list-group">
+        {% for o in order %}
+            <li class="list-group-item">
+              <span style="float:left">{{o.product}} </span>
+              {% if o.toppings != "0" and o.toppings != "" %}
+                  : {{ o.toppings }}
+              {% endif %}
+              <span style="float:right">{{o.status}}</span>
+              <span name="price" style="float:right; margin-right:50px">${{o.price}}</span>
+
+            </li>
+        {% endfor %}
+        </ul>
+        <br>
+        <h3 style="float:left">total:</h3><span id="total" style="float:left;margin-left:20px">{{price}}</span>
+        <a href="{% url 'placed' %}" class="btn btn-warning" style="float:left;margin-left:20px">place the order</a>
+
+      </div>
+    </body>
+</html>
