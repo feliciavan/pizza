@@ -16,5 +16,4 @@ urlpatterns = [
     path("cart", views.cart_view, name="cart"),
     path("placed", views.placed_view, name="placed"),
     path("complete", views.complete_view, name="complete"),
-    path("posts", views.posts, name="posts"),
 ]
