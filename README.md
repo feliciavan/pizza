@@ -1,6 +1,8 @@
 # Online shop for pizza
 
-This is a shopping website for pizza. It provides the menu of all kinds of food. Customers can choose whatever they want into their shopping cart. 
+This is a shopping website for pizza. It provides the menu of all kinds of food. Customers can choose whatever they want into their shopping cart. The owner of this website can check the order list of all customers and process the orders.
+
+This website is based on Django and a database.
 
 In templates/orders folder:
 
