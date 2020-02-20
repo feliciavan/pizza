@@ -47,9 +47,10 @@
         {% endfor %}
         </ul>
         <br>
-        <h3 style="float:left">total:</h3><span id="total" style="float:left;margin-left:20px">{{price}}</span>
+        {% if price %}
+        <h5 style="float:left">The total price of the unplaced orders is:</h5><span id="total" style="float:left;margin-left:20px">{{price}}</span>
         <a href="{% url 'placed' %}" class="btn btn-warning" style="float:left;margin-left:20px">place the order</a>
-
+        {% endif %}
       </div>
     </body>
 </html>

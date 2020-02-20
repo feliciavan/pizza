@@ -60,7 +60,7 @@ def signup_view(request):
         email = request.POST["email"]
         user = authenticate(username=name, password=password)
         if user is not None:
-            return render(request, "orders/signup.html", {"message": "existing user name"})
+            return render(request, "orders/signup.html", {"message": "Existing user name."})
         new_user = User.objects.create_user(name, email, password)
         new_user.active = True
         new_user.first_name = firstname
@@ -86,34 +86,37 @@ def pizza_view(request):
         }
         type = request.POST.getlist('type[]')
         if not type:
-            context.update( {"message": "you have to choose one type"})
+            context.update( {"message": "You have to choose one type."})
             return render(request, "orders/pizza.html", context)
         else:
             if len(type) > 1:
-                context.update( {"message": "one type at one time"} )
+                context.update( {"message": "One type at one time."} )
                 return render(request, "orders/pizza.html", context)
             else:
                 type_res = type[0]
 
         size = request.POST.getlist('size[]')
         if len(size) > 1:
-            context.update( {"message": "one size at one time"} )
+            context.update( {"message": "One size at one time."} )
             return render(request, "orders/pizza.html", context)
         if not size:
-            context.update( {"message": "you have to choose one size"})
+            context.update( {"message": "You have to choose one size."})
             return render(request, "orders/pizza.html", context)
         size_res = size[0]
         flavor = request.POST.getlist('flavor[]')
+        if not flavor:
+            context.update( {"message": "You have to choose one flavor."})
+            return render(request, "orders/pizza.html", context)
         if len(flavor) > 1:
-            context.update({"message": "one flavor at one time"})
+            context.update({"message": "One flavor at one time."})
             return render(request, "orders/pizza.html", context)
         if flavor[0] == "toppings":
             top = request.POST.getlist('top[]')
             if len(top) > 3:
-                context.update({"message": "3 toppings at most"})
+                context.update({"message": "3 toppings at most."})
                 return render(request, "orders/pizza.html", context)
             elif not top:
-                context.update({"message": "you have to choose one topping"})
+                context.update({"message": "You have to choose one topping."})
                 return render(request, "orders/pizza.html", context)
             else:
                 top_res = len(top)
@@ -122,7 +125,7 @@ def pizza_view(request):
         else:
             top = request.POST.getlist('top[]')
             if top:
-                context.update({"message": "you can not choose toppings with " + flavor[0] + " pizza"})
+                context.update({"message": "You can not choose toppings with " + flavor[0] + " pizza."})
                 toppings = 0
                 return render(request, "orders/pizza.html", context)
             else:
@@ -155,23 +158,23 @@ def subs_view(request):
         }
         sub = request.POST.getlist('sub[]')
         if len(sub) > 1:
-            context.update( {"message": "one type at one time"} )
+            context.update( {"message": "One type at one time."} )
             return render(request, "orders/subs.html", context)
         if not sub:
-            context.update( {"message": "you have to choose one type"})
+            context.update( {"message": "You have to choose one type."})
             return render(request, "orders/subs.html", context)
         sub_res = sub[0]
         size = request.POST.getlist('size[]')
         if len(size) > 1:
-            context.update( {"message": "one size at one time"} )
+            context.update( {"message": "One size at one time."} )
             return render(request, "orders/subs.html", context)
         if not size:
-            context.update( {"message": "you have to choose one size"})
+            context.update( {"message": "You have to choose one size."})
             return render(request, "orders/subs.html", context)
         size_res = size[0]
         extra = request.POST.getlist('extra[]')
         if len(extra) > 1:
-            context.update( {"message": "you can not choose yes and no at the same time."} )
+            context.update( {"message": "You can not choose yes and no at the same time."} )
             return render(request, "orders/subs.html", context)
         if not extra:
             context.update( {"message": "Do you need extra cheese?"})
@@ -184,7 +187,7 @@ def subs_view(request):
         addon = request.POST.getlist('addon[]')
         if sub_res == "steak":
             if len(addon) > 1:
-                context.update( {"message": "one add-on at one time"} )
+                context.update( {"message": "One add-on at one time."} )
                 return render(request, "orders/subs.html", context)
             if not addon:
                 p = SubsPrice.objects.get(kind__kind=sub_res, kind__size=size_res, kind__extracheese=extra_res)
@@ -196,7 +199,7 @@ def subs_view(request):
             return render(request, "orders/subs.html", context)
         else:
             if addon:
-                context.update( {"message": "no add-on is allowed."} )
+                context.update( {"message": "No add-on is allowed."} )
                 return render(request, "orders/subs.html", context)
             else:
                 p = SubsPrice.objects.get(kind__kind=sub_res, kind__size=size_res, kind__extracheese=extra_res)
@@ -229,7 +232,7 @@ def pasta_view(request):
             return render(request, "orders/pasta.html", context)
         else:
             context.update({"num_order": num_order})
-            context.update({"message": "you have not chosen yet"})
+            context.update({"message": "You have not chosen yet."})
             return render(request, "orders/pasta.html", context)
     else:
         context = {
@@ -249,7 +252,7 @@ def salads_view(request):
         }
         salad = request.POST.getlist('salad[]')
         if salad:
-            num_order = num_order + len(salad);
+            num_order = num_order + int(len(salad));
             context.update({"num_order": num_order})
             for sa in salad:
                 p = Salads.objects.get(kind=sa)
@@ -257,7 +260,7 @@ def salads_view(request):
             return render(request, "orders/salads.html", context)
         else:
             context.update({"num_order": num_order})
-            context.update({"message": "you have not chosen yet"})
+            context.update({"message": "You have not chosen yet."})
             return render(request, "orders/salads.html", context)
     else:
         context = {
@@ -278,18 +281,18 @@ def dinner_view(request):
         }
         dinner = request.POST.getlist('dinner[]')
         if len(dinner) > 1:
-            context.update( {"message": "one type at one time"} )
+            context.update( {"message": "One type at one time."} )
             return render(request, "orders/dinner.html", context)
         if not dinner:
-            context.update( {"message": "you have to choose one type"})
+            context.update( {"message": "You have to choose one type."})
             return render(request, "orders/dinner.html", context)
         dinner_res = dinner[0]
         size = request.POST.getlist('size[]')
         if len(size) > 1:
-            context.update( {"message": "one size at one time"} )
+            context.update( {"message": "One size at one time."} )
             return render(request, "orders/dinner.html", context)
         if not size:
-            context.update( {"message": "you have to choose one size"})
+            context.update( {"message": "You have to choose one size."})
             return render(request, "orders/dinner.html", context)
         size_res = size[0]
         p = DinnerPlattersPrice.objects.get(kind__kind=dinner_res, kind__size=size_res)
@@ -314,7 +317,8 @@ def cart_view(request):
     orders = Order.objects.filter(user=request.user)
     price = 0
     for order in orders:
-        price = price + order.price
+        if order.status == "unplaced":
+            price = price + order.price
 
     context = {
         "order": orders,
@@ -325,22 +329,24 @@ def cart_view(request):
 def placed_view(request):
     global num_order
     try:
-        num_order = len(Order.objects.filter(user=request.user))
+        orders = Order.objects.filter(user=request.user)
+        num_order = len(orders)
+        for order in orders:
+            order.status = "placed"
+            order.save()
+
     except:
         num_order = 0
     context = {
-        "user": request.user,
-        "toppings": PizzaTopping.objects.all(),
-        "num_order": num_order,
+        "order": orders,
         "message": "Thank you! Your order is placed."
     }
-    return render(request, "orders/pizza.html", context)
+    return render(request, "orders/cart.html", context)
 
 def complete_view(request):
     user = request.POST["user"]
     product = request.POST["product"]
     com = Order.objects.get(user=user,product=product)
-    print(com)
     com.status = "completed"
     com.save()
     return HttpResponse("done")

@@ -106,7 +106,7 @@
         <a href="{% url 'logout' %}" class="btn btn-light" style="float:left;margin-left:20px">logout</a>
         <br>
         <br>
-
+        {% if order %}
         <h3>orders</h3>
 
         <ul  class="list-group">
@@ -122,6 +122,9 @@
             </li>
         {% endfor %}
         </ul>
+        {% else %}
+      <h5> There is no order. </h5>
+        {% endif %}
 
       </div>
     </body>

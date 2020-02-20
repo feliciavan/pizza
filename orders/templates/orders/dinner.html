@@ -6,9 +6,20 @@
         <script tpye="text/javascript">
         document.addEventListener('DOMContentLoaded', () => {
 
+          document.querySelector('#cart').disabled = true;
+
+          if (document.querySelector('#check_price'))
+              document.querySelector('#cart').disabled = false;
+          else
+              document.querySelector('#cart').disabled = true;
+
+
             document.querySelector('#num_order').innerHTML =  {{ num_order}};
 
             document.querySelector('#cart').onclick= () => {
+              document.querySelector('#pricevanish').innerHTML = '';
+              document.querySelector('#cart').disabled = true;
+
               const request = new XMLHttpRequest();
               request.open('POST', '/order');
               // Callback function for when request completes
@@ -141,8 +152,11 @@
       </form>
       <button style="float:right;" id="cart" class="btn btn-success">add to the shopping cart</button>
       {% if price %}
-           <span style="font-size: 20px; float:right; margin-right:20px" id="check_price">{{ price }}</span>  <h3 style="float:right; margin-right:20px">price:</h3>
+           <div id = "pricevanish"><span style="font-size: 20px; float:right; margin-right:20px" id="check_price">{{ price }}</span>  <h3 style="float:right; margin-right:20px">price:</h3></div>
       {% endif %}
+      <br>
+      <br>
+      Please check the price first, then add the item to the shopping cart.
 
       </div>
     </body>

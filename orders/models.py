@@ -95,7 +95,7 @@ class Order(models.Model):
     product = models.CharField(max_length=64)
     price = models.FloatField()
     toppings = models.CharField(max_length=64)
-    status = models.CharField(default="pending", max_length=64)
+    status = models.CharField(default="unplaced", max_length=64)
     def __str__(self):
         if self.toppings!="0" and self.toppings!="":
             return f"{self.user} costs ${self.price} to buy {self.product} with {self.toppings}: {self.status}"
