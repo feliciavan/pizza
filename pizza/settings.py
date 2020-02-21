@@ -128,7 +128,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_URL = '/static/'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-ALLOWED_HOSTS = ['https://online-order-pizza.herokuapp.com/', '127.0.0.1']
+ALLOWED_HOSTS = ['https://order-yummy-pizza.herokuapp.com/', '127.0.0.1']
 # This should already be in your settings.py
 django_heroku.settings(locals())
 # This is new
